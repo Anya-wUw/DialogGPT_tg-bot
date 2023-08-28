@@ -1,0 +1,7 @@
+version: "2.2"
+
+services:
+  bot:
+    build:
+      context: .
+    image: anniborri/my_tg_bot:latest # your_username_docker_hub/image:version
