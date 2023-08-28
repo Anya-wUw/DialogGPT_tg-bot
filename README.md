@@ -1,5 +1,5 @@
 # DialogGPT_tg-bot
-Dialog Telegram Bot based on ruDialoGPT<br><br>
+Dialog Telegram Bot based on tinkoff-ai/ruDialoGPT-medium<br><br>
   
 Ссылка на Colab (с подробным описанием модели): https://colab.research.google.com/drive/13yY4eisgdwxYhLVZOpcMz-iy2R1xSn-O?usp=sharing<br>
 Image Docker: ```docker pull anniborri/my_tg_bot``` <br>
