@@ -90,8 +90,6 @@ Example response:
 2. **Include Nested Conversation History**: Enable the bot to access multiple previous messages for context.  
 3. **Optimize Training Hyperparameters**: Experiment with different batch sizes, learning rates, and epochs for improved results.  
 
----
-
 <br><hr><br>
 (Russian Translation)
 # DialogGPT_tg-bot
