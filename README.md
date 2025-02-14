@@ -1,3 +1,59 @@
+# DialogGPT_tg-bot  
+Dialog Telegram Bot based on tinkoff-ai/ruDialoGPT-medium<br><br>  
+
+Link to Colab (with a detailed model description): [Colab Notebook](https://colab.research.google.com/drive/13yY4eisgdwxYhLVZOpcMz-iy2R1xSn-O?usp=sharing) <br>  
+Docker Image: ```docker pull anniborri/my_tg_bot``` <br>  
+
+* **FT_DialogModel.ipynb** - notebook with code explanations (downloaded from Colab) <br>
+* **bot.py** - code for the Telegram bot <br>
+* **prepare_messages.py** - Telegram chat parser (```python prepare_messages.py result.json```) <br>
+
+### Task Description  
+Training a dialog language model, integrating it with a Telegram bot, and wrapping it in a Docker container.  
+
+### Data Collection  
+The initial data was generated manually in Telegram as a conversation between two users. This step was taken to ensure the model generates acceptable responses since tests with other open-source chats failed to achieve **satisfactory quality** (due to Colab’s limitations, training on a large dataset wasn’t possible).  
+![image](https://github.com/Anya-wUw/DialogGPT_tg-bot/assets/48104500/bdfa799a-708c-4af3-be75-059d3d99d71d)  
+
+### Data Preparation  
+I created a dictionary with two actors: user input (`@@FIRST@@`) and bot response (`@@SECOND@@`), which allowed me to prepare the training dataset for fine-tuning (more details in FT_DialogModel.ipynb).  
+![image](https://github.com/Anya-wUw/DialogGPT_tg-bot/assets/48104500/68afe01b-a4e2-4c2c-9b2e-e993518d6abd)  
+
+### Hypothesis  
+While working with the `reply_to_msg_id` column in the dataframe, I hypothesized that if the value of this column is `-1`, it indicates the start of a new conversation topic. All subsequent messages with this `msg_id` are replies to the original message. (This simplified hypothesis allowed for quick model training with **acceptable quality**) (see more in FT_DialogModel.ipynb).  
+
+### Fine-tuning the Model  
+For fine-tuning, I used the **Transformers** library and **PyTorch**. The base model used was **tinkoff-ai/ruDialoGPT-medium**. The model was fine-tuned on preprocessed data using the AdamW optimizer with a learning rate of `1e-5` and a batch size of 2 (due to Colab’s resource limitations, a small batch size was used). After training, the model was saved for use by the bot (more details in FT_DialogModel.ipynb).  
+
+### Model Testing  
+After training, I performed basic model testing by sending various text prompts and, upon receiving acceptable responses, proceeded to integration (more details in FT_DialogModel.ipynb).  
+
+### Integration  
+The model was integrated with a Telegram bot to generate real-time responses and wrapped in a Docker container (`bot.py`).  
+
+**Note:** Model quality was assessed subjectively.  
+
+### Conclusion  
+Before fine-tuning, the Telegram bot couldn’t logically respond to basic prompts like "Hi", "How are you?", or "What are you doing?" (see example below).  
+![image](https://github.com/Anya-wUw/DialogGPT_tg-bot/assets/48104500/44f22845-ea6b-4385-b006-bb2f72407492)  
+
+After fine-tuning, a significant improvement in responses was observed (more details in FT_DialogModel.ipynb).  
+
+### **Model Improvement Directions:**  
+1. **Expanding the Fine-tuning Dataset:**  
+   The more diverse the conversation history, the better the model performance.  
+
+2. **Nested Conversation History:**  
+   In the current implementation, the conversation history consists of only one previous message. Using a deeper history (access to multiple previous messages) could improve training and make dialogues more coherent.  
+
+3. **Training Hyperparameters:**  
+   Parameters like `batch_size`, `learning_rate` (AdamW), and `num_epochs` play a crucial role in model training. Conducting more experiments could help find optimal values and achieve better results.  
+
+### Example of Model Output:  
+![image](https://github.com/Anya-wUw/DialogGPT_tg-bot/assets/48104500/30cce450-6250-4b0d-9e18-046b40d7b928)  
+
+<br><hr><br>
+(Russian Translation)
 # DialogGPT_tg-bot
 Dialog Telegram Bot based on tinkoff-ai/ruDialoGPT-medium<br><br>
   
