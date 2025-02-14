@@ -1,56 +1,96 @@
 # DialogGPT_tg-bot  
-Dialog Telegram Bot based on tinkoff-ai/ruDialoGPT-medium<br><br>  
 
-Link to Colab (with a detailed model description): [Colab Notebook](https://colab.research.google.com/drive/13yY4eisgdwxYhLVZOpcMz-iy2R1xSn-O?usp=sharing) <br>  
-Docker Image: ```docker pull anniborri/my_tg_bot``` <br>  
+A Dialog Telegram Bot based on `tinkoff-ai/ruDialoGPT-medium`, trained and fine-tuned to generate human-like responses. This repository includes the code for fine-tuning the model, integrating it with a Telegram bot, and wrapping it in a Docker container for easy deployment.
 
-* **FT_DialogModel.ipynb** - notebook with code explanations (downloaded from Colab) <br>
-* **bot.py** - code for the Telegram bot <br>
-* **prepare_messages.py** - Telegram chat parser (```python prepare_messages.py result.json```) <br>
+---
 
-### Task Description  
-Training a dialog language model, integrating it with a Telegram bot, and wrapping it in a Docker container.  
+## 📄 Description  
 
-### Data Collection  
-The initial data was generated manually in Telegram as a conversation between two users. This step was taken to ensure the model generates acceptable responses since tests with other open-source chats failed to achieve **satisfactory quality** (due to Colab’s limitations, training on a large dataset wasn’t possible).  
-![image](https://github.com/Anya-wUw/DialogGPT_tg-bot/assets/48104500/bdfa799a-708c-4af3-be75-059d3d99d71d)  
+This project demonstrates how to build a dialog model using **ruDialoGPT-medium**, fine-tune it with custom Telegram chat data, and deploy it as a functional Telegram bot. The model generates contextual responses by predicting the next turn in a conversation.  
 
-### Data Preparation  
-I created a dictionary with two actors: user input (`@@FIRST@@`) and bot response (`@@SECOND@@`), which allowed me to prepare the training dataset for fine-tuning (more details in FT_DialogModel.ipynb).  
-![image](https://github.com/Anya-wUw/DialogGPT_tg-bot/assets/48104500/68afe01b-a4e2-4c2c-9b2e-e993518d6abd)  
+**Fine-tuning was done with a custom dataset**, representing dialogues between two actors: the user (`@@FIRST@@`) and the bot (`@@SECOND@@`), which improved the model's performance in generating relevant responses.
 
-### Hypothesis  
-While working with the `reply_to_msg_id` column in the dataframe, I hypothesized that if the value of this column is `-1`, it indicates the start of a new conversation topic. All subsequent messages with this `msg_id` are replies to the original message. (This simplified hypothesis allowed for quick model training with **acceptable quality**) (see more in FT_DialogModel.ipynb).  
+---
 
-### Fine-tuning the Model  
-For fine-tuning, I used the **Transformers** library and **PyTorch**. The base model used was **tinkoff-ai/ruDialoGPT-medium**. The model was fine-tuned on preprocessed data using the AdamW optimizer with a learning rate of `1e-5` and a batch size of 2 (due to Colab’s resource limitations, a small batch size was used). After training, the model was saved for use by the bot (more details in FT_DialogModel.ipynb).  
+## 🔧 Features  
+- Fine-tuned `tinkoff-ai/ruDialoGPT-medium` for personalized dialog generation.  
+- Real-time Telegram bot integration (`bot.py`).  
+- Docker container for simplified deployment.  
+- Preprocessing of Telegram chat data (`prepare_messages.py`).  
+- Code explanation and training details in `FT_DialogModel.ipynb`.  
 
-### Model Testing  
-After training, I performed basic model testing by sending various text prompts and, upon receiving acceptable responses, proceeded to integration (more details in FT_DialogModel.ipynb).  
+---
 
-### Integration  
-The model was integrated with a Telegram bot to generate real-time responses and wrapped in a Docker container (`bot.py`).  
+## 📁 File Structure  
 
-**Note:** Model quality was assessed subjectively.  
+- **FT_DialogModel.ipynb**: Jupyter notebook with detailed code explanations for model fine-tuning and testing.  
+- **bot.py**: Python script to integrate the fine-tuned model with Telegram's Bot API.  
+- **prepare_messages.py**: Script for parsing Telegram chat data and preparing it for training (`python prepare_messages.py result.json`).  
 
-### Conclusion  
-Before fine-tuning, the Telegram bot couldn’t logically respond to basic prompts like "Hi", "How are you?", or "What are you doing?" (see example below).  
-![image](https://github.com/Anya-wUw/DialogGPT_tg-bot/assets/48104500/44f22845-ea6b-4385-b006-bb2f72407492)  
+---
 
-After fine-tuning, a significant improvement in responses was observed (more details in FT_DialogModel.ipynb).  
+## 🚀 Fine-tuning Process  
 
-### **Model Improvement Directions:**  
-1. **Expanding the Fine-tuning Dataset:**  
-   The more diverse the conversation history, the better the model performance.  
+The fine-tuning was done using **Transformers** and **PyTorch** libraries. The base model, `tinkoff-ai/ruDialoGPT-medium`, was trained on manually created Telegram chat data to generate more coherent responses. Key steps:  
 
-2. **Nested Conversation History:**  
-   In the current implementation, the conversation history consists of only one previous message. Using a deeper history (access to multiple previous messages) could improve training and make dialogues more coherent.  
+1. **Preprocessing**: Data was preprocessed into user-bot pairs.  
+2. **Fine-tuning**: The model was fine-tuned using the AdamW optimizer (`learning_rate = 1e-5`, batch size = 2).  
+3. **Testing**: The model's responses were evaluated on various text prompts, showing significant improvements after fine-tuning.  
 
-3. **Training Hyperparameters:**  
-   Parameters like `batch_size`, `learning_rate` (AdamW), and `num_epochs` play a crucial role in model training. Conducting more experiments could help find optimal values and achieve better results.  
+---
 
-### Example of Model Output:  
-![image](https://github.com/Anya-wUw/DialogGPT_tg-bot/assets/48104500/30cce450-6250-4b0d-9e18-046b40d7b928)  
+## 🛠️ Requirements  
+
+- Python 3.7+  
+- PyTorch  
+- Transformers  
+- Telegram Bot API  
+- Docker  
+
+---
+
+## 📦 Installation & Usage  
+
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/your-repo/DialogGPT_tg-bot.git
+   cd DialogGPT_tg-bot
+   ```
+
+2. Build and run the Docker container:  
+   ```bash
+   docker pull anniborri/my_tg_bot
+   docker run -it anniborri/my_tg_bot
+   ```
+
+3. Set up your Telegram bot token in `bot.py`.  
+4. Run the bot:  
+   ```bash
+   python bot.py
+   ```
+
+---
+
+## 🔍 Example  
+
+Before fine-tuning:  
+The bot couldn’t respond logically to basic prompts like **"Hello"**, **"How are you?"**, or **"What are you doing?"**.  
+
+After fine-tuning:  
+The responses became much more coherent and relevant, showing significant improvements.  
+
+Example response:  
+![Example Output](https://github.com/Anya-wUw/DialogGPT_tg-bot/assets/48104500/30cce450-6250-4b0d-9e18-046b40d7b928)
+
+---
+
+## 📈 Model Improvements  
+
+1. **Expand the Dataset**: Use more diverse conversation datasets for better response quality.  
+2. **Include Nested Conversation History**: Enable the bot to access multiple previous messages for context.  
+3. **Optimize Training Hyperparameters**: Experiment with different batch sizes, learning rates, and epochs for improved results.  
+
+---
 
 <br><hr><br>
 (Russian Translation)
